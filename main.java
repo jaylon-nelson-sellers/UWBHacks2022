@@ -1,3 +1,7 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 /**
  * vttlibrary
  * main
@@ -12,10 +16,29 @@
  *
  */
 
+
+import fr.noop.subtitle.model.SubtitleParsingException;
+import fr.noop.subtitle.vtt.*;
+
 public class main{
 
-    public static void main(String args[])  //static method
-    {
-        System.out.println("Static method");
+    /**
+     * Main
+     * Executes file
+     * @param args
+     * @throws IOException
+     * @throws SubtitleParsingException
+     */
+    public static void main(String args[])throws IOException, SubtitleParsingException  {
+        testMethod();
+
+    }
+
+    /**
+     * Tests currently working files through example vtt (Avengers)
+     * @throws IOException
+     * @throws SubtitleParsingException
+     */
+    public static void testMethod() throws IOException, SubtitleParsingException {
     }
 }
