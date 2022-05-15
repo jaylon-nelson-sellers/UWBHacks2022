@@ -119,7 +119,7 @@ public class startingClass {
 			String word1 = removePunc(word0);
 
 			//if the word is a word to skip, or if the word already exists in the list of keywords, continue to the next word
-			if (wordsToSkipContains(word1) || keywordContains(word1)) {
+			if (wordsToSkipContains(word1) || keywordContains(word1) || word1.length() == 0) {
 				continue;
 			}
 			//otherwise, find its number of occurrences within the array, and add it as an object into the keyword list
