@@ -1,5 +1,7 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Collections;
@@ -28,11 +30,26 @@ public class startingClass {
 	static ArrayList<Keyword> keywords = new ArrayList<Keyword>();
 	
 	public static void main(String[] args) {
+		ArrayList<String> testArray = new ArrayList<>();
+		try {
+
+			VttObject testObject = new VttObject(new BufferedReader(new FileReader("Avengers_Endgame.vtt")));
+			testArray = testObject.getLines();
+
+
+		}
+		catch (FileNotFoundException exception)
+		{
+			exception.printStackTrace();
+		}
+
+
+
+
 		// TODO Auto-generated method stub
 		try {
 			fillInWordsToSkip(new File("mostCommonWords.txt"));
-			String[] transcript = {"multivariable calculus is slightly simpler than abstract algebra"};
-			findMostFrequentKeywords(transcript);
+			findMostFrequentKeywords(testArray);
 			for (Keyword k : keywords) {
 				System.out.println(k);
 			}
@@ -81,7 +98,46 @@ public class startingClass {
 		//sort the keywords based on how often they occur within the transcript
 		Collections.sort(keywords);
 	}
-	
+
+	public static void findMostFrequentKeywords(ArrayList<String> transcript) {
+		//convert the transcript array to a string
+		String transcriptString = "";
+		for (int i = 0; i < transcript.size(); i++) {
+			//separate lines using a space
+			transcriptString += transcript.get(i) + " ";
+		}
+
+		//convert the string to an array of strings where each string is a distinct word
+		String[] transcriptArray = transcriptString.split(" ");
+
+
+		//length of the string
+		for (int i = 0; i < transcriptArray.length; i++) {
+			String word1 = transcriptArray[i];
+			//if the word is a word to skip, or if the word already exists in the list of keywords, continue to the next word
+			if (wordsToSkipContains(word1) || keywordContains(word1)) {
+				continue;
+			}
+			//otherwise, find its number of occurrences within the array, and add it as an object into the keyword list
+			else {
+				int occurrences = 1;
+				for (int j = i + 1; j < transcriptArray.length; j++) {
+					String word2 = transcriptArray[j];
+					if (word1.equals(word2)) {
+						occurrences++;
+					}
+				}
+				keywords.add(new Keyword(word1, occurrences));
+			}
+		}
+
+		//sort the keywords based on how often they occur within the transcript
+		Collections.sort(keywords);
+	}
+
+
+
+
 	//checks to see whether or not the given word is in wordsToSkip
 	public static boolean wordsToSkipContains(String word) {
 		for (String s : wordsToSkip) {
@@ -91,6 +147,8 @@ public class startingClass {
 		}
 		return false;
 	}
+
+
 	
 	//checks to see whether or not the given word is already in the key words lists
 	public static boolean keywordContains(String word) {
