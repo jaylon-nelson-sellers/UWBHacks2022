@@ -30,6 +30,7 @@ public class startingClass {
 	static ArrayList<Keyword> keywords = new ArrayList<Keyword>();
 	
 	public static void main(String[] args) {
+		
 		ArrayList<String> testArray = new ArrayList<>();
 		try {
 
@@ -42,6 +43,7 @@ public class startingClass {
 		{
 			exception.printStackTrace();
 		}
+		
 
 
 
@@ -113,7 +115,9 @@ public class startingClass {
 
 		//length of the string
 		for (int i = 0; i < transcriptArray.length; i++) {
-			String word1 = transcriptArray[i];
+			String word0 = transcriptArray[i].toLowerCase();
+			String word1 = removePunc(word0);
+
 			//if the word is a word to skip, or if the word already exists in the list of keywords, continue to the next word
 			if (wordsToSkipContains(word1) || keywordContains(word1)) {
 				continue;
@@ -135,8 +139,16 @@ public class startingClass {
 		Collections.sort(keywords);
 	}
 
-
-
+	private static String removePunc(String word) {
+		String strRetVal = "";
+		for (int i = 0; i < word.length(); i++) {
+			char c = word.charAt(i);
+			if (c >= 'a' && c <= 'z') {
+				strRetVal += c;
+			}
+		}
+		return strRetVal;
+	}
 
 	//checks to see whether or not the given word is in wordsToSkip
 	public static boolean wordsToSkipContains(String word) {
