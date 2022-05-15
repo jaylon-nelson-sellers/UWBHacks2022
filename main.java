@@ -1,6 +1,5 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 
 /**
  * vttlibrary
@@ -16,10 +15,6 @@ import java.io.IOException;
  *
  */
 
-
-import fr.noop.subtitle.model.SubtitleParsingException;
-import fr.noop.subtitle.vtt.*;
-
 public class main{
 
     /**
@@ -27,9 +22,8 @@ public class main{
      * Executes file
      * @param args
      * @throws IOException
-     * @throws SubtitleParsingException
      */
-    public static void main(String args[])throws IOException, SubtitleParsingException  {
+    public static void main(String args[]) {
         testMethod();
 
     }
@@ -37,8 +31,22 @@ public class main{
     /**
      * Tests currently working files through example vtt (Avengers)
      * @throws IOException
-     * @throws SubtitleParsingException
      */
-    public static void testMethod() throws IOException, SubtitleParsingException {
+    public static void testMethod() {
+        try {
+            VttObject testObject = new VttObject(new BufferedReader(new FileReader("Avengers_Endgame.vtt")));
+            ArrayList<String> testArray = testObject.getLines();
+
+            for (int i = 0; i < testArray.size(); i++)
+            {
+                System.out.println(testArray.get(i));
+            }
+        }
+        catch (FileNotFoundException exception)
+        {
+            exception.printStackTrace();
+        }
+
+
     }
 }
