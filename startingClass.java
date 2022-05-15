@@ -2,35 +2,45 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Collections;
+import java.util.*;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import serpapi.GoogleSearch;
+import serpapi.SerpApiSearchException;
+
 
 /**
  * Problem: we saw an issue with students staying engage in online lectures
  * To increase retention and engagement, we created an external source to increase engagement using external links and keywords
+ *
  * @author yashv
- *
- *PROGRAM RETURNS THE FOLLOWING TO THE PROFESSOR
- *derivatives
- *integrals
- *math
- *calculus
- *fundamental
- *theorem
- *rule
- *
- *PROFESSOR ONLY SUPPLIES LINKS TO THE FOLLOWING
- *derivatives: http://blahblahblah
- *integrals: http://blahblahblah
- *theorem: http://blahblahblah
+ * <p>
+ * PROGRAM RETURNS THE FOLLOWING TO THE PROFESSOR
+ * derivatives
+ * integrals
+ * math
+ * calculus
+ * fundamental
+ * theorem
+ * rule
+ * <p>
+ * PROFESSOR ONLY SUPPLIES LINKS TO THE FOLLOWING
+ * derivatives: http://blahblahblah
+ * integrals: http://blahblahblah
+ * theorem: http://blahblahblah
  */
 public class startingClass {
 	static ArrayList<String> wordsToSkip = new ArrayList<String>();
 	static ArrayList<Keyword> keywords = new ArrayList<Keyword>();
-	
+
+	static serpapi.GoogleSearch search;
+	private static String serp_api_key = "5024dae6490ecf85c3892d6d50d0cad881887f55614a372733bdb1e9cad0778b";
+
+
 	public static void main(String[] args) {
-		
+
+		search = new GoogleSearch();
 		ArrayList<String> testArray = new ArrayList<>();
 		try {
 
@@ -38,30 +48,43 @@ public class startingClass {
 			testArray = testObject.getLines();
 
 
-		}
-		catch (FileNotFoundException exception)
-		{
+		} catch (FileNotFoundException exception) {
 			exception.printStackTrace();
 		}
-		
-
-
 
 
 		// TODO Auto-generated method stub
 		try {
 			fillInWordsToSkip(new File("mostCommonWords.txt"));
 			findMostFrequentKeywords(testArray);
+
+
 			for (Keyword k : keywords) {
 				System.out.println(k);
+
+				Map<String, String> parameter = new HashMap<>();
+				parameter.put("q", k.getName());
+				parameter.put("location", "Bothell, Washington");
+				search = new GoogleSearch(parameter, startingClass.serp_api_key);
+				JsonObject searchResults = search.getJson();
+				String searchResult = (searchResults.get("organic_results").toString());
+				JsonElement organicRes = searchResults.get("organic_results");
+				JsonObject firstLink = (JsonObject) organicRes.getAsJsonArray().get(0);
+				System.out.println( firstLink.get("link").getAsString().replaceAll("\"",""));
+
+				System.out.println();
+
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("The specified file cannot be found");
+		} catch (SerpApiSearchException e) {
+			throw new RuntimeException(e);
 		}
 
 	}
+
 	/**
 	 * use the input array of strings and find the most repeated words
 	 */
@@ -72,11 +95,11 @@ public class startingClass {
 			//separate lines using a space
 			transcriptString += transcript[i] + " ";
 		}
-		
+
 		//convert the string to an array of strings where each string is a distinct word
 		String[] transcriptArray = transcriptString.split(" ");
-		
-		
+
+
 		//length of the string
 		for (int i = 0; i < transcriptArray.length; i++) {
 			String word1 = transcriptArray[i];
@@ -94,9 +117,9 @@ public class startingClass {
 					}
 				}
 				keywords.add(new Keyword(word1, occurrences));
-			} 
+			}
 		}
-		
+
 		//sort the keywords based on how often they occur within the transcript
 		Collections.sort(keywords);
 	}
@@ -161,7 +184,6 @@ public class startingClass {
 	}
 
 
-	
 	//checks to see whether or not the given word is already in the key words lists
 	public static boolean keywordContains(String word) {
 		for (Keyword s : keywords) {
@@ -171,7 +193,7 @@ public class startingClass {
 		}
 		return false;
 	}
-	
+
 	//reads from the file all the common words that can be skipped
 	public static void fillInWordsToSkip(File f) throws FileNotFoundException {
 		Scanner wordReader = new Scanner(f);
