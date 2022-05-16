@@ -33,5 +33,4 @@ public class main{
      * @throws IOException
      */
     public static void testMethod() {
-    }
-}
+    }}

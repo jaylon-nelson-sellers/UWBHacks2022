@@ -1,0 +1,23 @@
+quantum: 9
+https://www.quantum.com/en/
+
+eigenvalue: 1
+https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors
+
+spectral: 1
+https://www.imdb.com/title/tt2106651/
+
+paradox: 1
+https://www.paradoxinteractive.com/our-games
+
+valkyrie: 1
+https://www.imdb.com/title/tt0985699/
+
+synaptic: 1
+https://synaptic.com/
+
+cardiac: 1
+https://www.merriam-webster.com/dictionary/cardiac
+
+dysrhythmia: 1
+https://bestpractice.bmj.com/topics/en-us/837
